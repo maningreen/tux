@@ -1,45 +1,33 @@
 {
-  # TODO: make an actually good desc lol
-  description = "A flake for the development and installation of the All Thing's Linux discord server's bot tux";
+  description = "All Thing's Linux discord bot - Tux";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+  inputs.nixpkgs = {
+    type = "github";
+    owner = "NixOS";
+    repo = "nixpkgs";
+    ref = "nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }: let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { inherit system; };
-    basePkgs = with pkgs; [
-      poetry
-      python313
-    ];
-    version = "0.1.0";
-  in {
-    devShells.${system}.default = pkgs.mkShell {
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  }:
+    let
+      supportedSystems = [
+        "x86_64-linux"
+        "x86_64-darwin"
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
 
-      packages = with pkgs; [
-      ] ++ basePkgs;
-
-      shellHook = ''
-        echo "Have fun developing :) - green"
-      '';
-
-      pkgs.${system}.default = pkgs.stdenv.mkDerivation {
-        pname = "tux";
-        version = version;
-
-        buildInputs = with pkgs; [
-        ] ++ basePkgs;
-
-        buildPhase = ''
-poetry env use 3.13.2
-poetry install
-        '';
-
-        installPhase = ''
-          # todo put something here :p
-        '';
-      };
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+    in {
+      devShells = forAllSystems (system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        tux = pkgs.callPackage ./shell.nix { inherit pkgs; };
+        default = self.devShells.${system}.tux;
+      });
     };
-  };
 }
