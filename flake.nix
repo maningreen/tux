@@ -12,16 +12,33 @@
     basePkgs = with pkgs; [
       poetry
       python313
-
     ];
+    version = "0.1.0";
   in {
     devShells.${system}.default = pkgs.mkShell {
+
       packages = with pkgs; [
       ] ++ basePkgs;
+
       shellHook = ''
         echo "Have fun developing :) - green"
       '';
+
       pkgs.${system}.default = pkgs.stdenv.mkDerivation {
+        pname = "tux";
+        version = version;
+
+        buildInputs = with pkgs; [
+        ] ++ basePkgs;
+
+        buildPhase = ''
+poetry env use 3.13.2
+poetry install
+        '';
+
+        installPhase = ''
+          # todo put something here :p
+        '';
       };
     };
   };
