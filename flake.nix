@@ -43,8 +43,8 @@ poetry -v install
 
       installPhase = ''
           # todo put something here :p
-          echo "hi there"
-          '';
+echo "hi there"
+      '';
     };
   };
 }
