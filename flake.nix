@@ -24,22 +24,27 @@
         echo "Have fun developing :) - green"
       '';
 
-      pkgs.${system}.default = pkgs.stdenv.mkDerivation {
-        pname = "tux";
-        version = version;
+    };
+    defaultPackage.${system} = pkgs.stdenv.mkDerivation {
+      pname = "tux";
+      version = version;
 
-        buildInputs = with pkgs; [
-        ] ++ basePkgs;
+      src = ./.;
 
-        buildPhase = ''
+      buildInputs = with pkgs; [
+      ] ++ basePkgs;
+
+      buildPhase = ''
+# manage poetry
+
 poetry env use 3.13.2
-poetry install
-        '';
+poetry -v install
+'';
 
-        installPhase = ''
+      installPhase = ''
           # todo put something here :p
-        '';
-      };
+          echo "hi there"
+          '';
     };
   };
 }
