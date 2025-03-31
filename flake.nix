@@ -29,5 +29,12 @@
         tux = pkgs.callPackage ./shell.nix { inherit pkgs; };
         default = self.devShells.${system}.tux;
       });
+
+      defaultPackage = forAllSystems (system: let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        tux = pkgs.callPackage ./package.nix { inherit pkgs; };
+        default = self.defaultPackages.${system}.tux;
+      });
     };
 }
