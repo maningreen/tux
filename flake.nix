@@ -30,11 +30,11 @@
         default = self.devShells.${system}.tux;
       });
 
-      defaultPackage = forAllSystems (system: let
+      packages = forAllSystems (system: let
         pkgs = nixpkgs.legacyPackages.${system};
       in {
-        tux = pkgs.callPackage ./package.nix { inherit pkgs; };
-        default = self.defaultPackages.${system}.tux;
+        tux = pkgs.callPackage ./derivation.nix { inherit pkgs; };
+        default = self.packages.${system}.tux;
       });
     };
 }
