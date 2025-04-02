@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }: pkgs.python312Packages.buildPythonApplication {
+{ pkgs ? import <nixpkgs> {}, ... }: pkgs.python313Packages.buildPythonApplication {
   pname = "tux";
   version = "0.1.0";
   src = ./.;
@@ -53,7 +53,7 @@
         setuptools
       ];
     };
-  in with pkgs.python312Packages; [
+  in with pkgs.python313Packages; [
       aiocache
       prisma
       loguru
@@ -80,8 +80,9 @@
       audioop-lts
     ];
 
-  buildInputs = with pkgs.python3Packages; [
-      poetry-core
+  nativeBuildInputs = with pkgs.python313Packages; [
+    poetry-core
+    packaging
   ];
 
   format = "pyproject";
