@@ -6,33 +6,39 @@
   propagatedBuildInputs = let
     buildPython = pkgs.python313Packages.buildPythonApplication;
 
-    reactionmenu = pkgs.python3Packages.buildPythonApplication rec {
+    reactionmenu = let
       pname = "reactionmenu";
       version = "3.1.7";
-      src = pkgs.fetchPypi {
+    in pkgs.python3Packages.buildPythonApplication {
         inherit pname version;
-        hash = "sha256-ENo8GWbeK2Jk/N9yU3NIkjxeFRUBZEN1wl9DC/2HBGM=";
+        src = pkgs.fetchPypi {
+          inherit pname version;
+          hash = "sha256-ENo8GWbeK2Jk/N9yU3NIkjxeFRUBZEN1wl9DC/2HBGM=";
+        };
+        propagatedBuildInputs = [ pkgs.python3Packages.discordpy ];
       };
-      propagatedBuildInputs = [ pkgs.python3Packages.discordpy ];
-    };
 
-    jishaku = buildPython rec {
+    jishaku = let
       pname = "jishaku";
       version = "2.6.0";
-      src = pkgs.fetchPypi {
+    in buildPython {
         inherit pname version;
-        hash = "sha256-ubTQU7jL22qP16jVSdCSjC5SlARMuxRcuybfNvl84ok=";
+        src = pkgs.fetchPypi {
+          inherit pname version;
+          hash = "sha256-ubTQU7jL22qP16jVSdCSjC5SlARMuxRcuybfNvl84ok=";
+        };
       };
-    };
 
-    asynctempfile = buildPython rec {
+    asynctempfile = let
       pname = "asynctempfile";
       version = "0.5.0";
-      src = pkgs.fetchPypi {
+    in buildPython {
         inherit pname version;
-        hash = "sha256-SmR8dHNX6IJzl7qtvf6H8wldMJI/p4nnlxEesCFgiEo=";
+        src = pkgs.fetchPypi {
+          inherit pname version;
+          hash = "sha256-SmR8dHNX6IJzl7qtvf6H8wldMJI/p4nnlxEesCFgiEo=";
+        };
       };
-    };
 
     audioop-lts = buildPython {
       pname = "audioop-lts";
@@ -72,10 +78,10 @@
       rsa
       asynctempfile
       audioop-lts
-    poetry-core
     ];
 
   buildInputs = with pkgs.python3Packages; [
+      poetry-core
   ];
 
   format = "pyproject";
