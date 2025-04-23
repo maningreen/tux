@@ -48,54 +48,70 @@
     ];
   };
 
-  poetryCore = let
-    pname = "poetry-core";
-    version = "2.1.2";
-  in  buildPython {
-      inherit pname version;
-      src = builtins.fetchTarball {
-        url = "https://files.pythonhosted.org/packages/84/2a/572c141e2a15b933b4a49eb888b0ae7335604f57c0f91a7298ae56d2df7c/poetry_core-2.1.2.tar.gz";
-        sha256 = "1i58hpls09xdfz5z80jg20x1mfqjrx4fcq4rn1g6pkr0mvch6k6k";
-      };
-      format = "pyproject";
-    };
 in pkgs.python313Packages.buildPythonApplication {
     pname = "tux";
     version = "0.1.0";
     src = ./.;
 
-    propagatedBuildInputs = with pkgs.python313Packages; [
-      aiocache
-      prisma
-      loguru
-      discordpy
-      githubkit
-      httpx
-      python-dotenv
-      sentry-sdk_2
-      reactionmenu
-      pillow
-      requests
-      aioconsole
-      aiofiles
-      cairosvg
-      colorama
-      dateparser
-      jishaku
-      psutil
-      pytz
-      pyyaml
-      rich
-      rsa
-      asynctempfile
-      audioop-lts
+    build-system = with pkgs.python313Packages; [
+      poetry-core
+      (pkgs.python313.withPackages(pkgs: with pkgs; [
+        poetry-core
+        aiocache
+        prisma
+        loguru
+        discordpy
+        githubkit
+        httpx
+        python-dotenv
+        sentry-sdk_2
+        reactionmenu
+        pillow
+        requests
+        aioconsole
+        aiofiles
+        cairosvg
+        colorama
+        dateparser
+        jishaku
+        psutil
+        pytz
+        pyyaml
+        rich
+        rsa
+        asynctempfile
+        audioop-lts
+      ]))
     ];
 
-    buildInputs =
-      with pkgs.python313Packages; [
-        poetryCore
-        packaging
-      ];
+    dependancies = with pkgs.python313Packages; [
+      (pkgs.python313.withPackages(pkgs: with pkgs; [
+        aiocache
+        prisma
+        loguru
+        discordpy
+        githubkit
+        httpx
+        python-dotenv
+        sentry-sdk_2
+        reactionmenu
+        pillow
+        requests
+        aioconsole
+        aiofiles
+        cairosvg
+        colorama
+        dateparser
+        jishaku
+        psutil
+        pytz
+        pyyaml
+        rich
+        rsa
+        asynctempfile
+        audioop-lts
+      ]))
+    ];
 
     format = "pyproject";
   }
